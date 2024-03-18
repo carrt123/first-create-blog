@@ -1,0 +1,93 @@
+<!DOCTYPE html>  <!-- 文档类型为html-->
+<html lang="">
+
+<head> <!-- 文档的头部 包括一些配置信息和引用的外部资源-->
+    <meta charset="utf-8"> <!--文档的编码为utf-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- 设置了页面的视图宽度为设备宽度，初始缩放比例为1，有助于在不同设备上响应布局-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.4.6.min.css') }}">
+    <!--url_for函数，用于生成文件的url路径。 bootstrap.4.6.min.css为一个外部样式文件，位于bootstrap文件夹中 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/init.css') }}">
+    <!-- 引入一个名叫initial.css外部样式文件，位于css文件夹中-->
+    {% block head %}{% endblock %}
+    <!-- 这是一个模板的占位符，用于插入自定义的头部信息-->
+    <title>{% block title %}{% endblock %}</title>
+    <!-- 模板占位符，用于插入自定义标题信息-->
+</head>
+
+<body>
+<!--body定义页面的主体部分 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- nav  定义了一个导航栏的容器-->
+
+        <div class="container">
+            <!--定义了一个容器块，用于将内容进行分组 -->
+            <a class="navbar-brand" href="#">问答</a>
+            <!-- 定义了导航栏品牌的链接 -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- 定义了一个用于收起和展开导航栏的按钮-->
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!--定义了展开后导航栏内容的容器 -->
+
+                <ul class="navbar-nav mr-auto">
+                    <!--定义了一个导航栏项目列表 -->
+                    <li class="nav-item active">
+                        <!--定义一个导航栏项目 -->
+                        <a class="nav-link" href="/">首页 <span class="sr-only">(current)</span></a>
+                        <!-- 定义了一个导航栏项目（首页）的链接-->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('qa.public_question') }}">发布问答</a>
+                        <!--定义了另外一个导航栏项目（发布问答)的链接，链接目标为 qa。public_question -->
+                    </li>
+                    <li class="nav-item ml-2">
+                        <form class="form-inline my-2 my-lg-0" method="GET" action="{{ url_for('qa.search') }}">
+                            <input class="form-control mr-sm-2" type="search" placeholder="关键字" aria-label="Search" name="q">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+                        </form>
+                    </li>
+                </ul>
+
+
+                <ul class="navbar-nav">
+                    <!--定义了一个导航栏项目列表 -->
+                  {% if user %}
+                    <!-- 定义了一个if语句，如果是用户，则执行下面的代码块-->
+                    <li class="nav-item">
+                        <!--定义了一个导航栏项目 -->
+                      <span class="nav-link">{{ user.username }}</span>
+                        <!-- 显示当前用户的用户名-->
+                    </li>
+                    <li class="nav-item">
+                        <!--定义了一个导航栏项目 -->
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">退出登录</a>
+                        <!-- 另外一个导航栏项目退出登入的链接，链接目标为auth。logout-->
+                    </li>
+
+                  {% else %}
+                    <!-- 如果不是用户-->
+                    <li class="nav-item">
+                        <!-- 定义了一个导航栏项目-->
+                      <a class="nav-link" href="{{ url_for('auth.login') }}">登录</a>
+                    </li>
+                    <li class="nav-item">
+                            <!--定义了一个导航栏项目  -->
+                        <a class="nav-link" href="{{ url_for('auth.register') }}">注册</a>
+                    </li>
+                  {% endif %}
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
+</body>
+
+</html>
